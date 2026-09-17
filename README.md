@@ -1,4 +1,6 @@
-Fraud Detection & Transaction Risk Analysis
+## Fraud Detection & Transaction Risk Dashboard##
+
+Fraud Detection & Transaction Risk Dashboard
 Tools: PostgreSQL | Power BI
 Project Type: Fraud Analytics | Transaction Risk
 Focus: Fraud Detection | Risk Concentration | Transaction Analysis
