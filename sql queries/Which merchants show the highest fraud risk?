@@ -1,0 +1,38 @@
+                                                 Business Question 3 
+Which merchants have the highest number of fraudulent transactions, highest fraud rates, and highest fraudulent transaction values
+
+
+                                     Query
+SELECT
+    merchant,
+
+    SUM(CASE
+        WHEN fraud = 1 THEN 1
+        ELSE 0
+    END) AS fraudulent_transactions,
+
+    ROUND(
+        SUM(CASE
+            WHEN fraud = 1 THEN 1
+            ELSE 0
+        END) * 100.0/ COUNT(*),
+        2
+    ) AS fraud_rate,
+    ROUND(
+        SUM(CASE
+            WHEN fraud = 1 THEN amount
+            ELSE 0
+        END),2) AS fraudulent_transaction_value
+FROM fraud_detection_data
+GROUP BY merchant
+ORDER BY fraud_rate DESC;
+
+                                                                              INSIGHT:
+The analysis shows that fraud risk is concentrated differently across merchants. M1294758098 had the highest fraud rate at 96.34%, M732195782 had the highest fraudulent transaction 
+value at approximately $1.35M, while M480139044 had the highest number of fraudulent transactions with 1,634 cases. This suggests that different merchants may represent different types 
+of fraud risk and should be investigated using both fraud rate and fraud volume/value
+
+                                                                            
+                                                                             Recommendation
+Prioritize high-risk merchants for further investigation and strengthen transaction screening around merchants with unusually high fraud rates or fraudulent transaction values.
+Additional authentication and fraud-prevention controls can be considered for high-risk transactions and merchant activity.
