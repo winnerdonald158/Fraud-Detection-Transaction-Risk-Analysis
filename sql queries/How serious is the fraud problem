@@ -1,0 +1,30 @@
+                                                          Business Question
+How many transactions are fraudulent, what percentage of all transactions are fraudulent, and what is the total transaction value associated with fraud?
+                  
+                          
+                    Query
+SELECT
+    COUNT(*) AS total_transactions,
+    SUM(amount) AS total_transaction_value,
+    SUM(CASE
+        WHEN fraud = 1 THEN 1
+        ELSE 0
+    END) AS fraudulent_transactions,
+    ROUND(
+        SUM(CASE  WHEN fraud = 1 THEN 1
+            ELSE 0  END) * 100.0 / COUNT(*),
+        2  ) AS fraud_rate,
+    ROUND(
+        SUM(CASE  WHEN fraud = 1 THEN amount
+            ELSE 0  END),2 ) AS fraudulent_transaction_value
+FROM fraud_detection_data;
+
+
+                                                               INSIGHT:
+The dataset contains 594,643 transactions, of which 7,200 were identified as fraudulent transactions , which had a fraud rate of 1.21% and approximately $3.82M in fraudulent 
+transaction value
+
+                                       
+                                                            RECOMMENDATION
+Use predictive analytics and real-time fraud monitoring to identify high-risk transactions (like from our data, transaction above $300) early and prioritize suspicious activity
+from any category or merchant or customers for investigation
