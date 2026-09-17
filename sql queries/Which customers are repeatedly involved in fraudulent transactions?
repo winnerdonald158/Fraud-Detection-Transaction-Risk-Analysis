@@ -1,0 +1,37 @@
+                                                                Business Question  
+Which customers are repeatedly involved in fraudulent transactions?
+Which customers have repeated fraudulent transactions, and what proportion and value of their transactions are fraudulent?
+
+
+                                                              Query
+SELECT
+    customer,
+	category,
+    SUM(CASE
+        WHEN fraud = 1 THEN 1
+        ELSE 0
+    END) AS fraudulent_transactions,
+    ROUND(
+        SUM(CASE
+            WHEN fraud = 1 THEN amount
+            ELSE 0
+        END),2) AS fraudulent_transaction_value
+FROM fraud_detection_data
+GROUP BY customer,category
+ORDER BY fraudulent_transactions DESC;
+
+
+                                                                              INSIGHT:
+The data shows that customer "'C1275518867'", "'C1350963410'", "'C2004941826'" has carried out 46, 42, 35 fraudulent transaction activity respectively and these fraudulent activities 
+are done in sport and toys category.
+I also discovered that these customers "'C806399525'", "'C1572610482'", "'C2004941826'", "'C381007057'", "'C483912131'", "'C417267123'", "'C1685492470'", "'C1978250683'", "'C515668508'" 
+have the following fraudulent transaction value respectively 45571.66, 28195.62, 25364.38, 22298.96, 21623.13, 21388.64, 20619.78, 19215.64, 18301.10 and these fraudulent transaction0 
+activities are done in the travel category
+
+Suggesting that these categories (travel and sport and toys categories )  may represent different customers and different types of fraud risk and should be investigated using both 
+fraudulent transaction and fraudulent transaction value 
+
+                                                                    
+                                                                          Recommendation
+Use behavioral analytics and fraud-screening models to flag customers associated with repeated suspicious activity for further investigation. 
+Risk indicators such as transaction patterns, customer activity, device information, and other available signals can be used to strengthen fraud detection.
