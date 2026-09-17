@@ -1,0 +1,52 @@
+                                                                                   Businesss Question 
+How does fraud risk change with transaction amount?
+How does fraud rate and fraudulent transaction value change across different transaction-value ranges?
+
+
+                                               QUERY
+SELECT
+    CASE WHEN amount < 100 THEN 'UPTO $100'
+	WHEN amount < 300 THEN '$101- $300'
+	WHEN amount < 500 THEN '$301- $500'
+	WHEN amount < 700 THEN '$501- $700'
+	WHEN amount < 1000 THEN '$701- $1000'
+	ELSE '$+1000'
+	END AS amount_group,
+	COUNT(*)total_transaction,
+    SUM(CASE
+        WHEN fraud = 1 THEN 1
+        ELSE 0
+    END) AS fraudulent_transactions,
+
+    ROUND(
+        SUM(CASE
+            WHEN fraud = 1 THEN 1
+            ELSE 0
+        END) * 100.0/ COUNT(*),
+        2
+    ) AS fraud_rate,
+
+    ROUND(
+        SUM(CASE
+            WHEN fraud = 1 THEN amount
+            ELSE 0
+        END),2) AS fraudulent_transaction_value
+FROM fraud_detection_data
+GROUP BY CASE WHEN amount < 100 THEN 'UPTO $100'
+	WHEN amount < 300 THEN '$101- $300'
+	WHEN amount < 500 THEN '$301- $500'
+	WHEN amount < 700 THEN '$501- $700' 
+	WHEN amount < 1000 THEN '$701- $1000'
+	ELSE '$+1000'
+	END
+	ORDER BY MIN(amount);
+
+
+                                                                                              INSIGHT:
+The data shows that fraud rates increase sharply as transaction amounts increase. Transactions above $300 show substantially higher fraud rates, while transactions below $100 have a 
+much lower fraud rate.
+
+                                                                   
+                                                                                                Recommendation
+Because higher-value transactions are associated with substantially higher fraud rates in this dataset, the business could apply additional screening or monitoring to high-value 
+transactions, particularly those transaction above $300.
