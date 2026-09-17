@@ -1,0 +1,68 @@
+                                               Business Question 
+How does fraudulent activity vary across transaction categories based on fraud volume, fraud rate, and fraudulent transaction value?
+
+
+                                  Query
+SELECT
+    category,
+
+    SUM(CASE
+        WHEN fraud = 1 THEN 1
+        ELSE 0
+    END) AS fraudulent_transactions,
+
+    ROUND(
+        SUM(CASE
+            WHEN fraud = 1 THEN 1
+            ELSE 0
+        END) * 100.0/ COUNT(*),
+        2
+    ) AS fraud_rate,
+
+    ROUND(
+        SUM(CASE
+            WHEN fraud = 1 THEN amount
+            ELSE 0
+        END),2) AS fraudulent_transaction_value
+FROM fraud_detection_data
+GROUP BY category
+ORDER BY fraud_rate DESC;
+
+
+                                                                           INSIGHT:
+These results show that the level of fraud is different across categories: Leisure has the highest fraud rate, Travel has the highest fraudulent transaction value, 
+while Sports & Toys has the highest number of fraudulent transactions
+
+
+                                                                       Possible Drivers
+I discovered that some merchants are linked with high fraud transaction activity in leisure, travel and sport and toy category
+
+SELECT
+	category,
+    merchant,
+    SUM(CASE
+        WHEN fraud = 1 THEN 1
+        ELSE 0
+    END) AS fraudulent_transactions,
+
+    ROUND(
+        SUM(CASE
+            WHEN fraud = 1 THEN 1
+            ELSE 0
+        END) * 100.0/ COUNT(*),
+        2
+    ) AS fraud_rate,
+
+    ROUND(
+        SUM(CASE
+            WHEN fraud = 1 THEN amount
+            ELSE 0
+        END),2) AS fraudulent_transaction_value
+FROM fraud_detection_data
+GROUP BY merchant,category
+ORDER BY fraud_rate DESC;
+
+                                                                                            Recommendation
+Use real-time fraud monitoring and screening tools to closely monitor suspicious transactions and merchant activity, particularly within the Leisure, Travel, and Sports & Toys categories. 
+Machine learning can also be used to identify unusual transaction patterns and prioritize high-risk activity for investigation
+
